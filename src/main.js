@@ -10,6 +10,18 @@ Vue.config.productionTip = false
 
 import './assets/css/index.css'
 
+router.beforeEach((to, from, next) => {
+  if (to.path === '/login') {
+    next()
+    return
+  }
+  if (localStorage.getItem('tokeng')) {
+    next()
+  } else {
+    router.push('/login')
+  }
+})
+
 new Vue({
   router,
   render: h => h(App)

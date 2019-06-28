@@ -4,7 +4,7 @@
       <el-form
         :model="ruleForm"
         :rules="rules"
-        ref="ruleForm"
+        ref="loginForm"
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
@@ -13,11 +13,11 @@
           <el-input v-model="ruleForm.username"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="ruleForm.password"></el-input>
+          <el-input type="password" v-model="ruleForm.password"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-          <el-button @click="resetForm('ruleForm')">重置</el-button>
+          <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
+          <el-button @click="resetForm('loginForm')">重置</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -58,9 +59,19 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          axios({
+            url: "http://localhost:8888/api/private/v1/login",
+            method: "post",
+            data: this.ruleForm
+          }).then(({ data: { data, meta } }) => {
+            if (meta.status === 200) {
+              // console.log(1);
+              localStorage.setItem("tokeng", data.token);
+              this.$router.push("/home");
+            }
+            console.log(data);
+          });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
