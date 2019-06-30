@@ -69,7 +69,7 @@ export default {
               localStorage.setItem("tokeng", data.token);
               this.$router.push("/home");
             }
-            console.log(data);
+            // console.log(data);
           });
         } else {
           return false;
